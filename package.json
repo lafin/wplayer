@@ -1,0 +1,37 @@
+{
+    "name": "wplayer",
+    "version": "0.0.1",
+    "private": true,
+    "contributors": [{
+        "name": "Sergey Kuvakin",
+        "email": "kuvakin@gmail.com"
+    }],
+    "scripts": {
+        "start": "node ./node_modules/gulp/bin/gulp.js"
+    },
+    "dependencies": {
+        "lodash": "*",
+        "express": "*",
+        "jade": "*",
+        "cookie-parser": "*",
+        "compression": "*",
+        "express-session": "*",
+        "body-parser": "*",
+        "errorhandler": "*",
+        "method-override": "*",
+        "express-flash": "*",
+        "express-validator": "*",
+        "connect-assets": "*",
+        "player": "*"
+    },
+    "devDependencies": {
+        "bower": "*",
+        "gulp": "*",
+        "gulp-concat": "*",
+        "gulp-uglify": "*",
+        "gulp-csso": "*",
+        "gulp-less": "*",
+        "gulp-nodemon": "*",
+        "gulp-bower-files": "*"
+    }
+}
