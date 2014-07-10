@@ -5,8 +5,7 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     csso = require('gulp-csso'),
     nodemon = require('gulp-nodemon'),
-    bower = require('gulp-bower-files'),
-    livereload = require('gulp-livereload');
+    bower = require('gulp-bower-files');
 
 gulp.task('js', function () {
     // Minify and copy all JavaScript
@@ -29,10 +28,8 @@ gulp.task('bower', function () {
 
 // Rerun the task when a file changes
 gulp.task('watch', function () {
-    livereload.listen();
     gulp.watch(['public/js/**/*.js', '*.js'], ['js']);
     gulp.watch(['public/less/**/*.less', '*.less'], ['less']);
-    gulp.watch('build/css/*.css').on('change', livereload.changed);
 });
 
 gulp.task('server', function () {

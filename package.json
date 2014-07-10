@@ -19,10 +19,13 @@
     "express-flash": "0.0.2",
     "express-session": "^1.6.4",
     "jade": "^1.3.1",
+    "lame": "^1.1.0",
     "lodash": "^2.4.1",
-    "method-override": "^2.0.2",
+    "method-override": "^2.1.0",
     "morgan": "^1.1.1",
-    "player": "^0.1.8"
+    "playlist-parser": "0.0.8",
+    "request": "^2.37.0",
+    "speaker": "^0.2.1"
   },
   "devDependencies": {
     "bower": "^1.3.7",
@@ -31,7 +34,6 @@
     "gulp-concat": "^2.3.0",
     "gulp-csso": "^0.2.9",
     "gulp-less": "^1.3.1",
-    "gulp-livereload": "^2.1.0",
     "gulp-nodemon": "^1.0.4"
   }
 }

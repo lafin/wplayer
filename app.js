@@ -16,7 +16,7 @@ var path = require('path');
  * Controllers (route handlers).
  */
 
-var homeController = require('./controllers/main');
+var mainController = require('./controllers/main');
 
 /**
  * Create Express server.
@@ -54,7 +54,7 @@ app.use(express['static'](path.join(__dirname, 'build'), {
  * Main routes.
  */
 
-app.get('/', homeController.index);
+app.get('/', mainController.index);
 
 /**
  * 500 Error Handler.
