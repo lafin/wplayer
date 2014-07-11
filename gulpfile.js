@@ -5,7 +5,7 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     csso = require('gulp-csso'),
     nodemon = require('gulp-nodemon'),
-    bower = require('gulp-bower-files');
+    bower = require('main-bower-files');
 
 gulp.task('js', function () {
     // Minify and copy all JavaScript
@@ -23,7 +23,7 @@ gulp.task('less', function () {
 });
 
 gulp.task('bower', function () {
-    bower().pipe(gulp.dest('build/libs'));
+    return gulp.src(bower()).pipe(gulp.dest('build/libs'));
 });
 
 // Rerun the task when a file changes

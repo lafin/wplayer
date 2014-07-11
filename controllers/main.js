@@ -16,10 +16,10 @@ while (countItem--) {
 }
 
 var item = playlist[0];
-if (item.match(/^http[s]*:\/\//gi)) {
-	stream = request(playlist[0]);
+if (item.match(/^http[s]{0,1}:\/\//gi)) {
+	stream = request(item);
 } else {
-	stream = fs.createReadStream(playlist[1]);
+	stream = fs.createReadStream(item);
 }
 
 stream.pipe(new lame.Decoder()).pipe(new Speaker());
