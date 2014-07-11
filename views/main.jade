@@ -37,8 +37,13 @@ html(lang='en')
                 span.glyphicon.glyphicon-pause
               button.btn.btn-default(type='button')
                 span.glyphicon.glyphicon-step-forward
+        span.file-input.btn.btn-primary.btn-file 
+          | Browse…
+          input(type='file', multiple='multiple')
+
       .footer
         p &copy; wPlayer
 
     script(src='/libs/jquery/dist/jquery.js')
     script(src='/libs/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/app.js')

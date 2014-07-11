@@ -55,6 +55,14 @@ app.use(express['static'](path.join(__dirname, 'build'), {
  */
 
 app.get('/', mainController.index);
+app.get('/controll/play', mainController.play);
+app.get('/controll/stop', mainController.stop);
+app.get('/controll/next', mainController.next);
+app.get('/controll/prev', mainController.prev);
+
+app.get('/list/add', mainController.add);
+app.post('/list/load', mainController.load);
+app.get('/list/clear', mainController.clear);
 
 /**
  * 500 Error Handler.
