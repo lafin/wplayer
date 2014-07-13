@@ -2,15 +2,16 @@
  * Module dependencies.
  */
 
-var _ = require('lodash');
-var express = require('express');
-var errorHandler = require('errorhandler');
-var methodOverride = require('method-override');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-var connectAssets = require('connect-assets');
-var path = require('path');
+var _ = require('lodash'),
+  express = require('express'),
+  errorHandler = require('errorhandler'),
+  methodOverride = require('method-override'),
+  session = require('express-session'),
+  bodyParser = require('body-parser'),
+  logger = require('morgan'),
+  connectAssets = require('connect-assets'),
+  path = require('path'),
+  multipart = require('connect-multiparty');
 
 /**
  * Controllers (route handlers).
@@ -61,7 +62,7 @@ app.get('/controll/next', mainController.next);
 app.get('/controll/prev', mainController.prev);
 
 app.get('/list/add', mainController.add);
-app.post('/list/load', mainController.load);
+app.post('/list/load', multipart(), mainController.load);
 app.get('/list/clear', mainController.clear);
 
 /**
