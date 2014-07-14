@@ -7,7 +7,7 @@ Simple web audio player local files or audio stream.
 ## Installation
 ```
 $ npm install
-$ ./node_modules/bower/bin/bower
+$ ./node_modules/bower/bin/bower install
 ```
 
 ## Run
