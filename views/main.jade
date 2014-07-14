@@ -21,21 +21,21 @@ html(lang='en')
   body
     .container
       .header
-        ul.nav.nav-pills.pull-right
-          li.active
-            a(href='#') Home
+        //- ul.nav.nav-pills.pull-right
+        //-   li.active
+        //-     a(href='#') Home
         h3.text-muted wPlayer
       .row.marketing
         form.form-horizontal
           fieldset
-            .btn-group
-              button.btn.btn-default(type='button')
+            .btn-group.controll-buttons
+              button.btn.btn-default(type='button', name='prev')
                 span.glyphicon.glyphicon-step-backward
-              button.btn.btn-default(type='button')
+              button.btn.btn-default(type='button' name='play')
                 span.glyphicon.glyphicon-play
-              button.btn.btn-default(type='button')
+              button.btn.btn-default(type='button' name='stop')
                 span.glyphicon.glyphicon-pause
-              button.btn.btn-default(type='button')
+              button.btn.btn-default(type='button' name='next')
                 span.glyphicon.glyphicon-step-forward
         br
         span.file-input.btn.btn-primary.btn-file

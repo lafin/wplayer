@@ -3,15 +3,14 @@ var request = require('request'),
 	Speaker = require('speaker'),
 	m3u = require('playlist-parser').M3U,
 	fs = require('fs'),
-	decoder = new lame.Decoder(),
-	speaker = new Speaker(),
+	speaker = null,
 	player = null;
 
 var playlistPath = __dirname + '/../playlist.m3u',
 	currentItem = 0,
-	play = function (num) {
+	startPlay = function (num) {
 		if (player) {
-			player.end();
+			stopPlay();
 		}
 		num = num || 0;
 		var list = m3u.parse(fs.readFileSync(playlistPath, {
@@ -20,21 +19,35 @@ var playlistPath = __dirname + '/../playlist.m3u',
 
 		var playlist = [],
 			i = list.length,
-			stream;
+			stream = null;
 		while (i--) {
 			playlist[i] = list[i].file;
 		}
 
+		if (!playlist.length) {
+			return false;
+		}
 		num = num < 0 ? 0 : num;
 		num = num >= playlist.length ? 0 : num;
+		currentItem = num;
 
-		i = playlist[currentItem];
+		i = playlist[num];
 		if (i.match(/^http[s]{0,1}:\/\//gi)) {
 			stream = request(i);
 		} else {
 			stream = fs.createReadStream(i);
 		}
-		return stream.pipe(decoder).pipe(speaker);
+		return stream.pipe(new lame.Decoder()).on('format', function (formated) {
+			speaker = new Speaker(formated);
+			this.pipe(speaker);
+		});
+	},
+	stopPlay = function () {
+		if (player) {
+			player.unpipe();
+			speaker.end();
+			player = null;
+		}
 	},
 	updatePlaylist = function (path, success, error) {
 		fs.readFile(path, function (err, data) {
@@ -51,7 +64,9 @@ var playlistPath = __dirname + '/../playlist.m3u',
 	};
 
 // list
-exports.add = function (req, res) {};
+exports.add = function (req, res) {
+	// TODO
+};
 exports.load = function (req, res) {
 	var files = req.files,
 		error = function (err) {
@@ -89,33 +104,35 @@ exports.clear = function (req, res) {
 
 // controll
 exports.play = function (req, res) {
-	player = play();
+	player = startPlay();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.stop = function (req, res) {
+	stopPlay();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.next = function (req, res) {
-	player = play(++currentItem);
+	player = startPlay(++currentItem);
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.prev = function (req, res) {
-	player = play(--currentItem);
+	player = startPlay(--currentItem);
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 
+// index
 exports.index = function (req, res) {
 	res.render('main');
 };

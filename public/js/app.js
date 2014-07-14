@@ -19,3 +19,11 @@ input.on('change', function (e) {
   });
   e.preventDefault();
 });
+
+$('.controll-buttons button').on('click', function () {
+  $.ajax({
+    url: '/controll/' + this.name,
+    type: 'get'
+  });
+  this.blur();
+});
