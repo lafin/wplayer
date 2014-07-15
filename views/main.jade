@@ -26,19 +26,23 @@ html(lang='en')
         //-     a(href='#') Home
         h3.text-muted wPlayer
       .row.marketing
-        form.form-horizontal
-          fieldset
-            .btn-group.controll-buttons
-              button.btn.btn-default(type='button', name='prev')
-                span.glyphicon.glyphicon-step-backward
-              button.btn.btn-default(type='button' name='play')
-                span.glyphicon.glyphicon-play
-              button.btn.btn-default(type='button' name='stop')
-                span.glyphicon.glyphicon-pause
-              button.btn.btn-default(type='button' name='next')
-                span.glyphicon.glyphicon-step-forward
-        br
-        span.file-input.btn.btn-primary.btn-file
+        .col-xs-4
+          .controll-buttons
+            button.btn.btn-default(type='button', name='prev', data-toggle='tooltip', data-placement='top', title='prev')
+              span.glyphicon.glyphicon-step-backward
+            button.btn.btn-default(type='button' name='play', data-toggle='tooltip', data-placement='top', title='play')
+              span.glyphicon.glyphicon-play
+            button.btn.btn-default(type='button' name='stop', data-toggle='tooltip', data-placement='top', title='stop')
+              span.glyphicon.glyphicon-pause
+            button.btn.btn-default(type='button' name='next', data-toggle='tooltip', data-placement='top', title='next')
+              span.glyphicon.glyphicon-step-forward
+        .col-xs-2
+          .list-buttons
+            button.btn.btn-default(type='button', name='plus', data-toggle='tooltip', data-placement='top', title='add', disabled='disabled')
+              span.glyphicon.glyphicon-plus
+            button.btn.btn-default(type='button' name='clear', data-toggle='tooltip', data-placement='top', title='clear')
+              span.glyphicon.glyphicon-remove
+        .col-xs-2.file-input.btn.btn-primary.btn-file
           | Browse…
           input(type='file')
 

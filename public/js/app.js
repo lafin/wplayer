@@ -27,3 +27,13 @@ $('.controll-buttons button').on('click', function () {
   });
   this.blur();
 });
+
+$('.list-buttons button').on('click', function () {
+  $.ajax({
+    url: '/list/' + this.name,
+    type: 'get'
+  });
+  this.blur();
+});
+
+$('button[data-toggle="tooltip"]').tooltip();
