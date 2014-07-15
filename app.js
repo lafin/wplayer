@@ -2,11 +2,9 @@
  * Module dependencies.
  */
 
-var _ = require('lodash'),
-  express = require('express'),
+var express = require('express'),
   errorHandler = require('errorhandler'),
   methodOverride = require('method-override'),
-  session = require('express-session'),
   bodyParser = require('body-parser'),
   logger = require('morgan'),
   connectAssets = require('connect-assets'),
@@ -46,7 +44,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(methodOverride());
-// app.use(session({}));
 app.use(express['static'](path.join(__dirname, 'build'), {
   maxAge: week
 }));
