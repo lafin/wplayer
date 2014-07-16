@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     csso = require('gulp-csso'),
     nodemon = require('gulp-nodemon'),
-    bower = require('main-bower-files');
+    bower = require('main-bower-files'),
+    filter = require('gulp-filter');
 
 gulp.task('js', function () {
     // Minify and copy all JavaScript
@@ -22,8 +23,16 @@ gulp.task('less', function () {
         .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('bower', function () {
-    return gulp.src(bower()).pipe(gulp.dest('build/libs'));
+gulp.task('vendors', function () {
+    return gulp.src(bower())
+        .pipe(filter('**/*.{css,js}'))
+        .pipe(gulp.dest('build/vendors'));
+});
+
+gulp.task('fonts', function () {
+    return gulp.src(bower())
+        .pipe(filter('**/*.{eot,svg,ttf,woff}'))
+        .pipe(gulp.dest('build/fonts'));
 });
 
 // Rerun the task when a file changes
@@ -41,4 +50,4 @@ gulp.task('server', function () {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['bower', 'js', 'less', 'watch', 'server']);
+gulp.task('default', ['vendors', 'fonts', 'js', 'less', 'watch', 'server']);

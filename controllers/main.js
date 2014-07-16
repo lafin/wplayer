@@ -39,7 +39,14 @@ var playlistPath = __dirname + '/../playlist.m3u',
 		}
 		return stream.pipe(new lame.Decoder()).on('format', function (formated) {
 			speaker = new Speaker(formated);
+			speaker.on('close', function() {
+				console.log('close');
+			});
 			this.pipe(speaker);
+		}).on('id3v1', function(id3) {
+			console.log(id3.artist, '-', id3.title);
+		}).on('id3v2', function(id3) {
+			console.log(id3.artist, '-', id3.title);
 		});
 	},
 	stopPlay = function () {

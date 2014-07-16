@@ -9,15 +9,15 @@ html(lang='en')
     title wPlayer
     //
        Bootstrap core CSS 
-    link(href='/libs/bootstrap/dist/css/bootstrap.css', rel='stylesheet')
+    link(href='/vendors/bootstrap.css', rel='stylesheet')
     //
         Custom style
     link(href='/css/style.css', rel='stylesheet')
     //
        HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries 
     //if lt IE 9
-      script(src='/libs/html5shiv/dest/html5shiv.js')
-      script(src='/libs/respond/dest/respond.src.js')
+      script(src='/vendors/html5shiv.js')
+      script(src='/vendors/respond.src.js')
   body
     .container
       .header
@@ -49,6 +49,6 @@ html(lang='en')
       .footer
         p &copy; wPlayer
 
-    script(src='/libs/jquery/dist/jquery.js')
-    script(src='/libs/bootstrap/dist/js/bootstrap.js')
+    script(src='/vendors/jquery.js')
+    script(src='/vendors/bootstrap.js')
     script(src='/js/app.js')

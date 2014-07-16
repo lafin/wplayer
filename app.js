@@ -35,7 +35,7 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(connectAssets({
-  paths: ['build/css', 'build/js', 'build/libs'],
+  paths: ['build/css', 'build/js', 'build/vendors', 'build/fonts'],
   helperContext: app.locals
 }));
 app.use(logger('dev'));
