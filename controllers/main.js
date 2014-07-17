@@ -8,9 +8,17 @@ var request = require('request'),
 
 var playlistPath = __dirname + '/../playlist.m3u',
 	currentItem = 0,
-	startPlay = function (num) {
+	next = function () {
+		stop();
+		return play(++currentItem);
+	},
+	prev = function () {
+		stop();
+		return play(--currentItem);
+	},
+	play = function (num) {
 		if (player) {
-			stopPlay();
+			return stop();
 		}
 		num = num || 0;
 		var list = m3u.parse(fs.readFileSync(playlistPath, {
@@ -37,23 +45,23 @@ var playlistPath = __dirname + '/../playlist.m3u',
 		} else {
 			stream = fs.createReadStream(i);
 		}
-		return stream.pipe(new lame.Decoder()).on('format', function (formated) {
-			speaker = new Speaker(formated);
-			speaker.on('close', function() {
+		return stream.pipe(new lame.Decoder()).on('format', function (f) {
+			speaker = new Speaker(f);
+			speaker.on('close', function () {
 				console.log('close');
 			});
 			this.pipe(speaker);
-		}).on('id3v1', function(id3) {
+		}).on('id3v1', function (id3) {
 			console.log(id3.artist, '-', id3.title);
-		}).on('id3v2', function(id3) {
+		}).on('id3v2', function (id3) {
 			console.log(id3.artist, '-', id3.title);
 		});
 	},
-	stopPlay = function () {
+	stop = function () {
 		if (player) {
 			player.unpipe();
-			speaker.end();
 			player = null;
+			speaker.end();
 		}
 	},
 	updatePlaylist = function (path, success, error) {
@@ -111,28 +119,28 @@ exports.clear = function (req, res) {
 
 // controll
 exports.play = function (req, res) {
-	player = startPlay();
+	player = play();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.stop = function (req, res) {
-	stopPlay();
+	stop();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.next = function (req, res) {
-	player = startPlay(++currentItem);
+	player = next();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.prev = function (req, res) {
-	player = startPlay(--currentItem);
+	player = prev();
 	res.send({
 		status: 'success',
 		err: []
