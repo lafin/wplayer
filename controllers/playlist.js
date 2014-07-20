@@ -1,29 +1,30 @@
 var m3u = require('playlist-parser').M3U,
-	fs = require('fs');
+	fs = require('fs'),
+	self = this;
 
-var playlistPath;
+exports.path = __dirname + '/../playlist.m3u';
 
-exports.playlistPath = playlistPath = __dirname + '/../playlist.m3u';
-
-exports.getPlayList = function () {
-	var list = m3u.parse(fs.readFileSync(playlistPath, {
+exports.list = function () {
+	if (!fs.existsSync(this.path)) {
+		fs.writeFileSync(this.path, '');
+	}
+	var list = m3u.parse(fs.readFileSync(this.path, {
 		encodeing: 'utf8'
 	}).toString());
 
-	var playlist = [],
-		i = list.length;
-	while (i--) {
+	var playlist = [];
+	for (var i = 0; i < list.length; i++) {
 		playlist[i] = list[i].file;
 	}
 	return playlist;
 };
 
-exports.updatePlayList = function (path, success, error) {
+exports.update = function (path, success, error) {
 	fs.readFile(path, function (err, data) {
 		if (err) {
 			return error(err);
 		}
-		fs.writeFile(playlistPath, data, function (err) {
+		fs.writeFile(self.path, data, function (err) {
 			if (err) {
 				return error(err);
 			}

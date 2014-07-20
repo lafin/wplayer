@@ -22,12 +22,12 @@ exports.load = function (req, res) {
 		};
 	for (var i in files) {
 		if (files.hasOwnProperty(i)) {
-			playlist.updatePlayList(files[i].path, success, error);
+			playlist.update(files[i].path, success, error);
 		}
 	}
 };
 exports.clear = function (req, res) {
-	fs.writeFile(playlist.playlistPath, '', function (err) {
+	fs.writeFile(playlist.path, '', function (err) {
 		if (err) {
 			return res.send({
 				status: 'error',

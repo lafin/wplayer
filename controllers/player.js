@@ -20,7 +20,7 @@ exports.prev = function () {
 };
 
 exports.play = function (num) {
-	var list = playlist.getPlayList();
+	var list = playlist.list();
 	if (!list.length) {
 		return false;
 	}
