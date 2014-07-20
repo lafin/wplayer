@@ -44,6 +44,7 @@ gulp.task('watch', function () {
 gulp.task('server', function () {
     nodemon({
         script: 'app.js',
+        nodeArgs: ['--expose-gc'],
         ext: 'jade js',
         ignore: ['public/**', 'build/**', 'node_modules/**', 'bower_components/**']
     });

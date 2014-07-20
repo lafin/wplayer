@@ -6,10 +6,9 @@ var request = require('request'),
 
 var current = 0,
 	speaker = null,
-	player = null,
 	self = this;
 
-exports.player = player;
+exports.player = null;
 
 exports.next = function () {
 	this.stop();
@@ -21,26 +20,44 @@ exports.prev = function () {
 };
 
 exports.play = function (num) {
-	num = num || 0;
 	var list = playlist.getPlayList();
 	if (!list.length) {
 		return false;
 	}
+
+	num = num || 0;
 	num = num < 0 ? 0 : num;
 	num = num >= list.length ? 0 : num;
 	current = num;
 
 	var i = list[num],
-		stream;
+		stream = null;
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
 		stream = request(i);
 	} else {
-		stream = fs.createReadStream(i);
+		if (fs.existsSync(i)) {
+			stream = fs.createReadStream(i);
+		} else {
+			return this.play(++current);
+		}
 	}
+	list = null;
+
+	var chunk = 0;
+	stream.on('data', function () {
+		chunk++;
+		if (chunk >= 100) {
+			global.gc();
+			chunk = 0;
+		}
+	});
+
 	return stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
 		speaker.on('close', function () {
-			return self.play(++current);
+			if (self.player) {
+				return self.play(++current);
+			}
 		});
 		this.pipe(speaker);
 	}).on('id3v1', function (id3) {
@@ -50,10 +67,12 @@ exports.play = function (num) {
 	});
 };
 
-exports.stop = function () {
-	if (player) {
-		player.unpipe();
-		player = null;
+exports.stop = function (silence) {
+	if (this.player) {
+		this.player.unpipe();
+		if (silence) {
+			this.player = null;
+		}
 		speaker.end();
 	}
 };

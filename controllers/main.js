@@ -50,7 +50,7 @@ exports.play = function (req, res) {
 	});
 };
 exports.stop = function (req, res) {
-	player.stop();
+	player.stop(true);
 	res.send({
 		status: 'success',
 		err: []

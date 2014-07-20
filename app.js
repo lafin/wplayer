@@ -1,4 +1,12 @@
 /**
+ * Check gc
+ */
+
+if (!global.gc) {
+  return console.error('Need run include flag --expose-gc "example: node --expose-gc app.js"');
+}
+
+/**
  * Module dependencies.
  */
 
