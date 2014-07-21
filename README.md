@@ -1,5 +1,8 @@
 # wPlayer
-
+[![Build Status](https://api.travis-ci.org/lafin/wplayer.svg?branch=master)](https://travis-ci.org/lafin/wplayer)
+[![Dependency Status](https://david-dm.org/lafin/wplayer.svg)](https://david-dm.org/lafin/wplayer)
+[![devDependency Status](https://david-dm.org/lafin/wplayer/dev-status.svg)](https://david-dm.org/lafin/wplayer#info=devDependencies)
+___
 Simple web audio player local files or audio stream.
 
 ![](https://dl.dropboxusercontent.com/u/7211201/github/wplayer.png)
