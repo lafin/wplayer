@@ -41,16 +41,26 @@ exports.play = function (num) {
 		stream = null;
 
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
+		var headers = {
+			'Icy-MetaData': '0'
+		};
 		stream = request({
 			url: i,
-			headers: {
-				'Icy-MetaData': '1'
-			}
+			headers: headers
 		});
+		var countChunk = 0;
 		stream.on('data', function (data) {
-			var track = parseStream(data);
-			self.currentTrack = track ? track : self.currentTrack;
-			global.gc();
+			if(+headers['Icy-MetaData']) {
+				var track = parseStream(data);
+				self.currentTrack = track ? track : self.currentTrack;
+			}
+			// fix memmory leak after recive 300 chunk
+			if (countChunk > 300) {
+				global.gc();
+				countChunk = 0;
+			} else {
+				countChunk += 1;
+			}
 		});
 	} else {
 		if (fs.existsSync(i)) {
