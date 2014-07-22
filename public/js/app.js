@@ -41,7 +41,7 @@ var currentTrack = function () {
     url: '/controll/track',
     type: 'get',
     success: function (res) {
-      $('#track').html(res.data);
+      $('.track').html(res.data);
     }
   });
 };
