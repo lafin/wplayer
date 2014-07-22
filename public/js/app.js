@@ -13,8 +13,8 @@ input.on('change', function (e) {
     cache: false,
     processData: false,
     contentType: false,
-    success: function (data) {
-      console.log(data);
+    success: function (res) {
+      console.log(res);
     }
   });
   e.preventDefault();
@@ -35,5 +35,20 @@ $('.list-buttons button').on('click', function () {
   });
   this.blur();
 });
+
+var currentTrack = function () {
+  $.ajax({
+    url: '/controll/track',
+    type: 'get',
+    success: function (res) {
+      $('#track').html(res.data);
+    }
+  });
+};
+
+currentTrack();
+setInterval(function () {
+  currentTrack();
+}, 2000);
 
 $('button[data-toggle="tooltip"]').tooltip();

@@ -9,6 +9,7 @@ var current = 0,
 	self = this;
 
 exports.player = null;
+exports.currentTrack = '';
 
 exports.next = function () {
 	this.stop();
@@ -18,6 +19,12 @@ exports.prev = function () {
 	++current;
 	this.stop();
 };
+
+function parseStream(data) {
+	var reg = /StreamTitle=\'(.*?)\'/gi;
+	data = reg.exec(data);
+	return data ? data[1] : data;
+}
 
 exports.play = function (num) {
 	var list = playlist.list();
@@ -32,8 +39,19 @@ exports.play = function (num) {
 
 	var i = list[num],
 		stream = null;
+
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
-		stream = request(i);
+		stream = request({
+			url: i,
+			headers: {
+				'Icy-MetaData': '1'
+			}
+		});
+		stream.on('data', function (data) {
+			var track = parseStream(data);
+			self.currentTrack = track ? track : self.currentTrack;
+			global.gc();
+		});
 	} else {
 		if (fs.existsSync(i)) {
 			stream = fs.createReadStream(i);
@@ -41,16 +59,7 @@ exports.play = function (num) {
 			return this.play(++current);
 		}
 	}
-	list = null;
-
-	var chunk = 0;
-	stream.on('data', function () {
-		chunk++;
-		if (chunk >= 100) {
-			global.gc();
-			chunk = 0;
-		}
-	});
+	list = undefined;
 
 	return stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
@@ -60,10 +69,8 @@ exports.play = function (num) {
 			}
 		});
 		this.pipe(speaker);
-	}).on('id3v1', function (id3) {
-		console.log(id3.artist, '-', id3.title);
 	}).on('id3v2', function (id3) {
-		console.log(id3.artist, '-', id3.title);
+		self.currentTrack = id3.artist + ' - ' + id3.title;
 	});
 };
 

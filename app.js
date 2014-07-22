@@ -65,6 +65,7 @@ app.get('/controll/play', mainController.play);
 app.get('/controll/stop', mainController.stop);
 app.get('/controll/next', mainController.next);
 app.get('/controll/prev', mainController.prev);
+app.get('/controll/track', mainController.track);
 
 app.get('/list/add', mainController.add);
 app.post('/list/load', multipart(), mainController.load);

@@ -70,6 +70,12 @@ exports.prev = function (req, res) {
 		err: []
 	});
 };
+exports.track = function (req, res) {
+	res.send({
+		status: 'success',
+		data: player.currentTrack
+	});
+};
 
 // index
 exports.index = function (req, res) {
