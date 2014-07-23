@@ -2,7 +2,8 @@ var request = require('request'),
 	lame = require('lame'),
 	fs = require('fs'),
 	Speaker = require('speaker'),
-	playlist = require('./playlist');
+	playlist = require('./playlist'),
+	Transform = require('stream').Transform;
 
 var current = 0,
 	speaker = null,
@@ -21,9 +22,39 @@ exports.prev = function () {
 };
 
 function parseStream(data) {
-	var reg = /StreamTitle=\'(.*?)\'/gi;
+	var reg = /StreamTitle=\'(.*?)\'/i;
 	data = reg.exec(data);
 	return data ? data[1] : data;
+}
+
+function createParser() {
+	var parser = new Transform();
+	var count = 0;
+	parser._transform = function (data, encoding, done) {
+		var len = data.length;
+		count += len;
+		if (count >= self.metaint) {
+			var offset = ((count - self.metaint) - len) * -1;
+			var metaLen = ~~data[offset] * 16;
+
+			var track = parseStream(data.slice(offset, offset + metaLen + 1).toString('utf8'));
+			self.currentTrack = track ? track : self.currentTrack;
+
+			this.push(data.slice(0, offset));
+			this.push(data.slice(offset + metaLen + 1));
+
+			if (track) {
+				global.gc();
+			}
+
+			count = len - (offset + metaLen + 1);
+			return done();
+		}
+
+		this.push(data);
+		return done();
+	};
+	return parser;
 }
 
 exports.play = function (num) {
@@ -42,26 +73,18 @@ exports.play = function (num) {
 
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
 		var headers = {
-			'Icy-MetaData': '0'
+			'Icy-MetaData': '1'
 		};
 		stream = request({
 			url: i,
 			headers: headers
 		});
-		var countChunk = 0;
-		stream.on('data', function (data) {
-			if(+headers['Icy-MetaData']) {
-				var track = parseStream(data);
-				self.currentTrack = track ? track : self.currentTrack;
-			}
-			// fix memmory leak after recive 300 chunk
-			if (countChunk > 300) {
-				global.gc();
-				countChunk = 0;
-			} else {
-				countChunk += 1;
-			}
+		stream.on('response', function (data) {
+			self.metaint = ~~data.headers['icy-metaint'];
 		});
+		if (+headers['Icy-MetaData']) {
+			stream = stream.pipe(createParser());
+		}
 	} else {
 		if (fs.existsSync(i)) {
 			stream = fs.createReadStream(i);
