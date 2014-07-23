@@ -5,7 +5,7 @@
 ___
 Simple web audio player local files or audio stream.
 
-![](https://dl.dropboxusercontent.com/u/7211201/github/wplayer.png)
+![](https://raw.githubusercontent.com/lafin/wplayer/master/screen.png)
 
 ## Installation
 ```
