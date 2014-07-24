@@ -24,6 +24,8 @@ var express = require('express'),
  */
 
 var mainController = require('./controllers/main');
+var schedule = require('./controllers/schedule');
+schedule.init();
 
 /**
  * Create Express server.

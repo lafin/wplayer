@@ -3,6 +3,7 @@ var request = require('request'),
 	fs = require('fs'),
 	Speaker = require('speaker'),
 	playlist = require('./playlist'),
+	config = require('../config/config'),
 	Transform = require('stream').Transform;
 
 var current = 0,
@@ -73,16 +74,19 @@ exports.play = function (num) {
 
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
 		var headers = {
-			'Icy-MetaData': '1'
+			'Icy-MetaData': config.useMetaData
 		};
 		stream = request({
 			url: i,
 			headers: headers
 		});
+		stream.on('error', function () {
+			self.play(++current);
+		});
 		stream.on('response', function (data) {
 			self.metaint = ~~data.headers['icy-metaint'];
 		});
-		if (+headers['Icy-MetaData']) {
+		if (config.useMetaData) {
 			stream = stream.pipe(createParser());
 		}
 	} else {
