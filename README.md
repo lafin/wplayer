@@ -6,6 +6,15 @@ Simple web audio player local files or audio stream.
 
 ![](https://raw.githubusercontent.com/lafin/wplayer/master/screen.png)
 
+## Features
+- play mp3
+- play audio stream (radio)
+- support m3u playlist
+- control play, stop, next, prev
+- scheduler
+- show metadata (current track)
+- ui support mobile browser (tested Iphone 4)
+
 ## Installation
 ```
 $ npm install
@@ -18,6 +27,20 @@ $ npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Config
+```js
+$ vim config/config.js
+
+// only for stream radio, recommendation set 0, if set 1 may have problems when playing
+this.useMetaData = 0;
+
+// if you want disable scheduler simple commenting this blog
+this.schedule = {
+ 	play: ['08:00', '19:00'],
+ 	stop: ['09:30', '02:45']
+};
+```
 
 ## Deploy example
 ### systemd
