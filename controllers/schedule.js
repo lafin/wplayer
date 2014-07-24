@@ -16,16 +16,18 @@ var scheduleJob = function (time, action, callback) {
 
 exports.init = function () {
 	var schedule = config.schedule;
-	for (var action in schedule) {
-		if (schedule.hasOwnProperty(action)) {
-			for (var i = 0; i < schedule[action].length; i++) {
-				scheduleJob(schedule[action][i], action, function (action) {
-					if (action === 'stop') {
-						player[action](true);
-					} else {
-						player.player = player[action]();
-					}
-				});
+	if (schedule) {
+		for (var action in schedule) {
+			if (schedule.hasOwnProperty(action)) {
+				for (var i = 0; i < schedule[action].length; i++) {
+					scheduleJob(schedule[action][i], action, function (action) {
+						if (action === 'stop') {
+							player[action](true);
+						} else {
+							player.player = player[action]();
+						}
+					});
+				}
 			}
 		}
 	}
