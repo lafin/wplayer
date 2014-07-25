@@ -21,6 +21,7 @@
     "lame": "^1.1.0",
     "method-override": "^2.1.2",
     "morgan": "^1.2.0",
+    "node-schedule": "^0.1.13",
     "playlist-parser": "0.0.8",
     "request": "^2.38.0",
     "speaker": "^0.2.1",
