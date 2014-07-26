@@ -7,11 +7,7 @@ exports.init = function () {
 	var schedule = config.schedule;
 	if (schedule) {
 		var callback = function (action) {
-			if (action === 'stop') {
-				player[action](true);
-			} else {
-				player.player = player[action]();
-			}
+			player[action]();
 		};
 		for (var action in schedule) {
 			if (schedule.hasOwnProperty(action)) {

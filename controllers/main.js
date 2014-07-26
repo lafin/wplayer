@@ -43,14 +43,14 @@ exports.clear = function (req, res) {
 
 // controll
 exports.play = function (req, res) {
-	player.player = player.play();
+	player.play();
 	res.send({
 		status: 'success',
 		err: []
 	});
 };
 exports.stop = function (req, res) {
-	player.stop(true);
+	player.stop();
 	res.send({
 		status: 'success',
 		err: []
