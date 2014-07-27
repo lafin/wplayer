@@ -2,7 +2,7 @@
 [![Dependency Status](https://david-dm.org/lafin/wplayer.svg)](https://david-dm.org/lafin/wplayer)
 [![devDependency Status](https://david-dm.org/lafin/wplayer/dev-status.svg)](https://david-dm.org/lafin/wplayer#info=devDependencies)
 ___
-Simple web audio player local files or audio stream.
+Simple node.js audio player local files or audio stream.
 
 ![](https://raw.githubusercontent.com/lafin/wplayer/master/screen.png)
 
@@ -45,6 +45,8 @@ this.schedule = {
 ```
 
 ## Deploy example
+### Rasberry Pi
+For easy installation, use [pac](https://www.npmjs.org/package/pac)
 ### systemd
 ```
 $ vim /etc/systemd/system/wplayer.service
