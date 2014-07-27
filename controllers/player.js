@@ -79,6 +79,15 @@ function play(num) {
 		});
 		if (config.useMetaData) {
 			stream = stream.pipe(createParser());
+		} else {
+			var chunk = 0;
+			stream.on('data', function () {
+				chunk++;
+				if (chunk === 20) {
+					chunk = 0;
+					global.gc();
+				}
+			});
 		}
 	} else {
 		if (fs.existsSync(i)) {
