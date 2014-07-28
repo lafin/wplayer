@@ -1,6 +1,6 @@
 var player = require('./player'),
 	config = require('../config/config'),
-	cron = require('node-schedule'),
+	CronJob = require('cron').CronJob,
 	tasks = [];
 
 exports.init = function () {
@@ -12,7 +12,8 @@ exports.init = function () {
 		for (var action in schedule) {
 			if (schedule.hasOwnProperty(action)) {
 				for (var i = 0; i < schedule[action].length; i++) {
-					var job = cron.scheduleJob(schedule[action][i], callback.bind(this, action));
+					var job = new CronJob(schedule[action][i], callback.bind(this, action));
+					job.start();
 					tasks.push(job);
 				}
 			}
@@ -22,6 +23,6 @@ exports.init = function () {
 
 exports.clear = function () {
 	for (var i = 0; i < tasks.length; i++) {
-		tasks[i].cancel();
+		tasks[i].stop();
 	}
 };
