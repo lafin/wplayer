@@ -49,11 +49,18 @@ function createParser() {
 	return parser;
 }
 
+function closeSpeaker() {
+	if (speaker) {
+		speaker.end();
+	}
+}
+
 function play(num) {
 	var list = playlist.list();
 	if (!list.length) {
 		return false;
 	}
+	player = null;
 
 	current = num || 0;
 	if (current < 0 || current >= list.length) {
@@ -72,7 +79,9 @@ function play(num) {
 			headers: headers
 		});
 		stream.on('error', function () {
-			return play(++current);
+			player.unpipe();
+			player = play(++current);
+			return player;
 		});
 		stream.on('response', function (data) {
 			self.metaint = ~~data.headers['icy-metaint'];
@@ -93,17 +102,21 @@ function play(num) {
 		if (fs.existsSync(i)) {
 			stream = fs.createReadStream(i);
 		} else {
-			return play(++current);
+			player = play(++current);
+			return player;
 		}
 	}
-	list = undefined;
+	list = null;
 
 	player = stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
 		speaker.on('close', function () {
+			speaker = null;
 			if (player) {
-				return play(++current);
+				player = play(++current);
+				return player;
 			}
+			player = null;
 		});
 		this.pipe(speaker);
 	}).on('id3v2', function (id3) {
@@ -116,7 +129,7 @@ function play(num) {
 function switchTrack() {
 	if (player) {
 		player.unpipe();
-		speaker.end();
+		closeSpeaker();
 	}
 }
 
@@ -130,7 +143,7 @@ exports.stop = function () {
 	if (player) {
 		player.unpipe();
 		player = null;
-		speaker.end();
+		closeSpeaker();
 	}
 };
 
