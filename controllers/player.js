@@ -8,9 +8,9 @@ var request = require('request'),
 
 var current = 0,
 	speaker = null,
+	player = null,
 	self = this;
 
-this.player = null;
 this.currentTrack = '';
 
 function parseStream(data) {
@@ -72,7 +72,7 @@ function play(num) {
 			headers: headers
 		});
 		stream.on('error', function () {
-			play(++current);
+			return play(++current);
 		});
 		stream.on('response', function (data) {
 			self.metaint = ~~data.headers['icy-metaint'];
@@ -98,10 +98,10 @@ function play(num) {
 	}
 	list = undefined;
 
-	self.player = stream.pipe(new lame.Decoder()).on('format', function (f) {
+	player = stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
 		speaker.on('close', function () {
-			if (self.player) {
+			if (player) {
 				return play(++current);
 			}
 		});
@@ -110,26 +110,26 @@ function play(num) {
 		self.currentTrack = id3.artist + ' - ' + id3.title;
 	});
 
-	return self.player;
+	return player;
 }
 
 function switchTrack() {
-	if (self.player) {
-		self.player.unpipe();
+	if (player) {
+		player.unpipe();
 		speaker.end();
 	}
 }
 
 exports.play = function () {
-	if (!self.player) {
-		play();
+	if (!player) {
+		return play();
 	}
 };
 
 exports.stop = function () {
-	if (this.player) {
-		this.player.unpipe();
-		this.player = null;
+	if (player) {
+		player.unpipe();
+		player = null;
 		speaker.end();
 	}
 };
