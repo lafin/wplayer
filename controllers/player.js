@@ -49,19 +49,33 @@ function createParser() {
 	return parser;
 }
 
-function closeSpeaker() {
+function closeSpeaker(clear) {
+	clear = clear || false;
 	if (speaker) {
 		speaker.end();
+		if (clear) {
+			speaker = null;
+		}
+	}
+}
+
+function closePlayer(clear) {
+	clear = clear || false;
+	if (player) {
+		player.end();
+		if (clear) {
+			player = null;
+		}
 	}
 }
 
 function play(num) {
+	self.currentTrack = '';
 	var list = playlist.list();
 	if (!list.length) {
 		return false;
 	}
 	player = null;
-
 	current = num || 0;
 	if (current < 0 || current >= list.length) {
 		current = 0;
@@ -69,19 +83,17 @@ function play(num) {
 
 	var i = list[current],
 		stream = null;
-
 	if (i.match(/^http[s]{0,1}:\/\//i)) {
 		var headers = {
 			'Icy-MetaData': config.useMetaData
 		};
 		stream = request({
 			url: i,
-			headers: headers
+			headers: headers,
+			timeout: 2000
 		});
 		stream.on('error', function () {
-			player.unpipe();
-			player = play(++current);
-			return player;
+			stream.end();
 		});
 		stream.on('response', function (data) {
 			self.metaint = ~~data.headers['icy-metaint'];
@@ -107,12 +119,14 @@ function play(num) {
 		}
 	}
 	list = null;
-
 	player = stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
-		speaker.on('close', function () {
+		speaker.on('flush', function () {
 			speaker = null;
+			closePlayer();
+		}).on('close', function () {
 			if (player) {
+				player = null;
 				player = play(++current);
 				return player;
 			}
@@ -127,10 +141,8 @@ function play(num) {
 }
 
 function switchTrack() {
-	if (player) {
-		player.unpipe();
-		closeSpeaker();
-	}
+	closePlayer();
+	closeSpeaker();
 }
 
 exports.play = function () {
@@ -140,11 +152,8 @@ exports.play = function () {
 };
 
 exports.stop = function () {
-	if (player) {
-		player.unpipe();
-		player = null;
-		closeSpeaker();
-	}
+	closePlayer(true);
+	closeSpeaker();
 };
 
 exports.next = function () {
