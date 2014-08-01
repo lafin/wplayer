@@ -7,6 +7,7 @@ var request = require('request'),
 	Transform = require('stream').Transform;
 
 var current = 0,
+	stop = false,
 	speaker = null,
 	player = null,
 	self = this;
@@ -50,7 +51,7 @@ function createParser() {
 }
 
 function closeSpeaker(clear) {
-	clear = clear || false;
+	clear = clear === false ? false : true;
 	if (speaker) {
 		speaker.end();
 		if (clear) {
@@ -60,7 +61,7 @@ function closeSpeaker(clear) {
 }
 
 function closePlayer(clear) {
-	clear = clear || false;
+	clear = clear === false ? false : true;
 	if (player) {
 		player.end();
 		if (clear) {
@@ -69,13 +70,22 @@ function closePlayer(clear) {
 	}
 }
 
+function switchTrack() {
+	clear();
+}
+
+function clear() {
+	closePlayer();
+	closeSpeaker();
+}
+
 function play(num) {
 	self.currentTrack = '';
 	var list = playlist.list();
 	if (!list.length) {
 		return false;
 	}
-	player = null;
+	stop = false;
 	current = num || 0;
 	if (current < 0 || current >= list.length) {
 		current = 0;
@@ -114,35 +124,28 @@ function play(num) {
 		if (fs.existsSync(i)) {
 			stream = fs.createReadStream(i);
 		} else {
-			player = play(++current);
-			return player;
+			return play(++current);
 		}
 	}
 	list = null;
 	player = stream.pipe(new lame.Decoder()).on('format', function (f) {
 		speaker = new Speaker(f);
 		speaker.on('flush', function () {
-			speaker = null;
-			closePlayer();
+			clear();
 		}).on('close', function () {
-			if (player) {
-				player = null;
-				player = play(++current);
-				return player;
+			if (!stop) {
+				return play(++current);
 			}
-			player = null;
 		});
 		this.pipe(speaker);
 	}).on('id3v2', function (id3) {
 		self.currentTrack = id3.artist + ' - ' + id3.title;
 	});
-
+	player.on('error', function () {
+		stream.end();
+		return play(++current);
+	});
 	return player;
-}
-
-function switchTrack() {
-	closePlayer();
-	closeSpeaker();
 }
 
 exports.play = function () {
@@ -152,8 +155,8 @@ exports.play = function () {
 };
 
 exports.stop = function () {
-	closePlayer(true);
-	closeSpeaker();
+	stop = true;
+	switchTrack();
 };
 
 exports.next = function () {
