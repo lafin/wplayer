@@ -100,7 +100,7 @@ function play(num) {
 		stream = request({
 			url: i,
 			headers: headers,
-			timeout: 2000
+			timeout: 20000
 		});
 		stream.on('error', function () {
 			stream.end();
@@ -147,6 +147,10 @@ function play(num) {
 	});
 	return player;
 }
+
+exports.getCurrentStatus = function () {
+	return player ? 'play' : 'stop';
+};
 
 exports.play = function () {
 	if (!player) {
