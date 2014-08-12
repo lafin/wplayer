@@ -13,11 +13,17 @@ exports.init = function () {
 			if (schedule.hasOwnProperty(action)) {
 				for (var i = 0; i < schedule[action].length; i++) {
 					var job = new CronJob(schedule[action][i], callback.bind(this, action));
-					job.start();
 					tasks.push(job);
 				}
 			}
 		}
+		this.start();
+	}
+};
+
+exports.start = function () {
+	for (var i = 0; i < tasks.length; i++) {
+		tasks[i].start();
 	}
 };
 
