@@ -20,7 +20,7 @@ input.on('change', function (e) {
   e.preventDefault();
 });
 
-$('.controll-buttons button').on('click', function () {
+$('.controll button').on('click', function () {
   $.ajax({
     url: '/controll/' + this.name,
     type: 'get'
@@ -28,7 +28,7 @@ $('.controll-buttons button').on('click', function () {
   this.blur();
 });
 
-$('.list-buttons button').on('click', function () {
+$('.list button').on('click', function () {
   $.ajax({
     url: '/list/' + this.name,
     type: 'get'

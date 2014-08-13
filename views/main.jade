@@ -21,33 +21,32 @@ html(lang='en')
   body
     .container
       .header
-        //- ul.nav.nav-pills.pull-right
-        //-   li.active
-        //-     a(href='#') Home
         h3.text-muted wPlayer
-        .col-sm-2
-        .center.controll.row.col-xs-12.col-sm-4
-          .controll-buttons
-            button.btn.btn-default(type='button', name='prev', data-toggle='tooltip', data-placement='top', title='prev')
-              span.glyphicon.glyphicon-step-backward
-            button.btn.btn-default(type='button' name='play', data-toggle='tooltip', data-placement='top', title='play')
-              span.glyphicon.glyphicon-play
-            button.btn.btn-default(type='button' name='stop', data-toggle='tooltip', data-placement='top', title='stop')
-              span.glyphicon.glyphicon-pause
-            button.btn.btn-default(type='button' name='next', data-toggle='tooltip', data-placement='top', title='next')
-              span.glyphicon.glyphicon-step-forward
-        .hidden-xs.center.list.row.col-xs-12.col-sm-4
-          .list-buttons(style='display: initial;')
-            button.btn.btn-default(type='button', name='plus', data-toggle='tooltip', data-placement='top', title='add', disabled='disabled')
-              span.glyphicon.glyphicon-plus
-            button.btn.btn-default(type='button' name='clear', data-toggle='tooltip', data-placement='top', title='clear')
-              span.glyphicon.glyphicon-remove
+      
+      .col-sm-2
+
+      .center
+        .controll.row.col-xs-12.col-sm-4
+          button.btn.btn-default(type='button', name='prev', data-toggle='tooltip', data-placement='top', title='prev')
+            span.glyphicon.glyphicon-step-backward
+          button.btn.btn-default(type='button' name='play', data-toggle='tooltip', data-placement='top', title='play')
+            span.glyphicon.glyphicon-play
+          button.btn.btn-default(type='button' name='stop', data-toggle='tooltip', data-placement='top', title='stop')
+            span.glyphicon.glyphicon-pause
+          button.btn.btn-default(type='button' name='next', data-toggle='tooltip', data-placement='top', title='next')
+            span.glyphicon.glyphicon-step-forward
+        .list.hidden-xs.col-sm-4
+          button.btn.btn-default(type='button', name='plus', data-toggle='tooltip', data-placement='top', title='add', disabled='disabled')
+            span.glyphicon.glyphicon-plus
+          button.btn.btn-default(type='button' name='clear', data-toggle='tooltip', data-placement='top', title='clear')
+            span.glyphicon.glyphicon-remove
           .file-input.btn.btn-primary.btn-file
             | Browse…
             input(type='file')
-        .col-sm-2
-        .center.row.col-xs-12.col-sm-12
+        .row.col-xs-12.col-sm-12
           p.text-muted.track
+
+      .col-sm-2
 
       .footer.col-xs-12.col-sm-12
         p &copy; wPlayer
