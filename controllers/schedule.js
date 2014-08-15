@@ -1,36 +1,37 @@
 var player = require('./player'),
 	config = require('../config/config'),
-	CronJob = require('cron').CronJob,
-	tasks = [];
+	later = require('later'),
+	tasks = [],
+	hub = require('../libs/hub'),
+	logger = hub.logger;
+
+later.date.localTime();
 
 exports.init = function () {
 	var schedule = config.schedule;
 	if (schedule) {
 		var callback = function (action) {
+			logger.info('schedule: getCurrentStatus "' + player.getCurrentStatus() + '" action "' + action + '"');
 			if (player.getCurrentStatus() !== action) {
 				player[action]();
 			}
+			return false;
 		};
 		for (var action in schedule) {
 			if (schedule.hasOwnProperty(action)) {
 				for (var i = 0; i < schedule[action].length; i++) {
-					var job = new CronJob(schedule[action][i], callback.bind(this, action));
+					logger.info('add schedule: ' + schedule[action][i] + ' ' + action);
+					var sched = later.parse.cron(schedule[action][i], true),
+						job = later.setInterval(callback.bind(this, action), sched);
 					tasks.push(job);
 				}
 			}
 		}
-		this.start();
-	}
-};
-
-exports.start = function () {
-	for (var i = 0; i < tasks.length; i++) {
-		tasks[i].start();
 	}
 };
 
 exports.clear = function () {
 	for (var i = 0; i < tasks.length; i++) {
-		tasks[i].stop();
+		tasks[i].clear();
 	}
 };

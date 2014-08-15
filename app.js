@@ -17,7 +17,22 @@ var express = require('express'),
   logger = require('morgan'),
   connectAssets = require('connect-assets'),
   path = require('path'),
-  multipart = require('connect-multiparty');
+  multipart = require('connect-multiparty'),
+  fs = require('fs'),
+  Logme = require('logme').Logme,
+  hub = require('./libs/hub');
+
+/**
+ * Logger
+ */
+
+var logFile = fs.createWriteStream(__dirname + '/log.txt', {
+  flags: 'a'
+});
+hub.logger = new Logme({
+  stream: logFile,
+  theme: 'clean'
+});
 
 /**
  * Controllers (route handlers).
@@ -48,7 +63,14 @@ app.use(connectAssets({
   paths: ['build/css', 'build/js', 'build/vendors', 'build/fonts'],
   helperContext: app.locals
 }));
-app.use(logger('dev'));
+
+app.use(logger('combined', {
+  skip: function (req, res) {
+    return res.statusCode < 400;
+  },
+  stream: logFile
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true

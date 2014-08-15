@@ -11,7 +11,7 @@ Simple node.js audio player local files or audio stream.
 - play audio stream (radio)
 - support m3u playlist
 - control play, stop, next, prev
-- scheduler cron style (use module [node-cron](https://github.com/ncb000gt/node-cron))
+- scheduler cron style (use module [later](https://github.com/bunkat/later))
 - show metadata (current track)
 - ui support mobile browser (tested Iphone 4)
 
@@ -36,10 +36,10 @@ $ vim config/config.js
 this.useMetaData = 0;
 
 // if you want disable scheduler simple commenting this blog
-// cron syntax (http://www.nncron.ru/help/EN/working/cron-format.htm)
+// cron syntax with seconds (http://bunkat.github.io/later/parsers.html#cron)
 this.schedule = {
-	play: ['30 08 * * 1-5', '20 19 * * 1-5'],
-	stop: ['30 09 * * 1-5', '45 02 * * *']
+	play: ['00 30 08 * * 1-5', '00 20 19 * * 1-5'],
+	stop: ['00 30 09 * * 1-5', '00 45 02 * * *']
 };
 ```
 
