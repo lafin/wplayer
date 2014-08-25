@@ -1,6 +1,7 @@
 /* globals $:false */
 
 var input = $('input[type="file"]');
+var isTouchDevice = 'ontouchstart' in document.documentElement;
 
 input.on('change', function (e) {
   var form = new FormData();
@@ -20,7 +21,9 @@ input.on('change', function (e) {
   e.preventDefault();
 });
 
-$('.controll button').on('click', function () {
+var eventType = isTouchDevice ? 'touchstart' : 'click';
+
+$('.controll button').on(eventType, function () {
   $.ajax({
     url: '/controll/' + this.name,
     type: 'get'
@@ -28,7 +31,7 @@ $('.controll button').on('click', function () {
   this.blur();
 });
 
-$('.list button').on('click', function () {
+$('.list button').on(eventType, function () {
   $.ajax({
     url: '/list/' + this.name,
     type: 'get'
@@ -51,4 +54,6 @@ setInterval(function () {
   currentTrack();
 }, 2000);
 
-$('button[data-toggle="tooltip"]').tooltip();
+if (!isTouchDevice) {
+  $('button[data-toggle="tooltip"]').tooltip();
+}
